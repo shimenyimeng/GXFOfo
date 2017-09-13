@@ -1,0 +1,24 @@
+//
+//  GXFOfo.pch
+//  067-- GXFOfo
+//
+//  Created by 顾雪飞 on 2017/9/12.
+//  Copyright © 2017年 顾雪飞. All rights reserved.
+//
+
+#ifndef GXFOfo_pch
+#define GXFOfo_pch
+
+#import "Masonry.h"
+#import "UIImageView+WebCache.h"
+
+#define GXFRandomColor [UIColor colorWithRed:arc4random_uniform(256) / 255.0 green:arc4random_uniform(256) / 255.0 blue:arc4random_uniform(256) / 255.0 alpha:1.0]
+
+#ifdef DEBUG
+#define GXFLog(fmt, ...) NSLog((@"%s [Line %d] " fmt), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)
+
+#else
+#define GXFLog(...)
+#endif
+
+#endif /* GXFOfo_pch */
