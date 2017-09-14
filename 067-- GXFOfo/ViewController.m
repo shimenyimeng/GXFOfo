@@ -14,8 +14,11 @@
 #import "OFOMessageViewController.h"
 #import "OFOUserCenterBtn.h"
 #import "pop.h"
+#import "DZQrScanningVC.h"
 
-@interface ViewController () <MAMapViewDelegate, AMapSearchDelegate, AMapLocationManagerDelegate>
+#define kManualViewHeight 600
+
+@interface ViewController () <MAMapViewDelegate, AMapSearchDelegate, AMapLocationManagerDelegate, DZQrScanningBaseVCDelegate>
 
 @property (nonatomic, strong) MAMapView *mapView;
 @property (nonatomic, strong) AMapSearchAPI *search;
@@ -34,6 +37,8 @@
 @property (nonatomic, assign) CGFloat oldY;
 @property (nonatomic, strong) UIView *userCenterBottomView;
 @property (nonatomic, strong) UIView *userCenterTopView;
+@property (nonatomic, strong) UIView *manualCoverView;
+@property (nonatomic, strong) UIView *manualView;
 
 @property (nonatomic, strong) AMapLocationManager *locationManager;
 
@@ -63,6 +68,8 @@
     // 把地图添加至view
     [self.view addSubview:mapView];
     mapView.delegate = self;
+    mapView.showsCompass = NO;
+    mapView.rotateEnabled = NO;
     self.mapView = mapView;
     
     [mapView setZoomLevel:17 animated:YES];
@@ -97,6 +104,7 @@
     UIButton *useBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     self.useBtn = useBtn;
     [useBtn setImage:[UIImage imageNamed:@"start_button_bg_scan"] forState:UIControlStateNormal];
+    [useBtn addTarget:self action:@selector(useBtnClcik) forControlEvents:UIControlEventTouchUpInside];
     [self.useView addSubview:useBtn];
     [useBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.useView);
@@ -349,6 +357,20 @@
     [self.navigationController pushViewController:messageVc animated:YES];
 }
 
+#pragma mark - 扫码用车
+- (void)useBtnClcik {
+    DZQrScanningVC *scanningVc = [DZQrScanningVC new];
+    scanningVc.delegate = self;
+    [self presentViewController:scanningVc animated:YES completion:nil];
+}
+
+- (void)closeManualView {
+    [self.manualCoverView removeFromSuperview];
+    [UIView animateWithDuration:0.25 animations:^{
+        self.manualView.transform = CGAffineTransformIdentity;
+    }];
+}
+
 #pragma mark - 用户中心的拖拽手势
 - (void)removeUserCenterView:(UIPanGestureRecognizer *)pan {
     [UIView animateWithDuration:0.25 animations:^{
@@ -559,6 +581,115 @@
         }
     }
     return _userCenterBottomView;
+}
+
+- (void)qrScanningBaseVC:(DZQrScanningBaseVC *)scanningBaseVC manualInputBtnClick:(UIButton *)button {
+    // 添加透明底图
+    [self.view addSubview:self.manualCoverView];
+    [self.manualCoverView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+    }];
+    
+    // 添加手动输入视图
+    [self.view addSubview:self.manualView];
+    [self.manualView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.equalTo(self.view.mas_bottom);
+        make.height.mas_equalTo(kManualViewHeight);
+    }];
+    
+    [UIView animateWithDuration:0.01 animations:^{
+        self.manualView.transform = CGAffineTransformMakeTranslation(0, -1);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.manualView.transform = CGAffineTransformMakeTranslation(0, -kManualViewHeight);
+        } completion:^(BOOL finished) {
+            
+        }];
+    }];
+}
+
+- (UIView *)manualCoverView {
+    if (!_manualCoverView) {
+        _manualCoverView = [UIView new];
+        _manualCoverView.backgroundColor = [UIColor clearColor];
+        UIImageView *logoView = [UIImageView new];
+        logoView.image = [UIImage imageNamed:@"yellowBikeLogo"];
+        [_manualCoverView addSubview:logoView];
+        [logoView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(_manualCoverView).offset(20);
+            make.top.equalTo(_manualCoverView).offset(30);
+        }];
+        UIButton *closeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [closeBtn setImage:[UIImage imageNamed:@"closeFork"] forState:UIControlStateNormal];
+        [closeBtn addTarget:self action:@selector(closeManualView) forControlEvents:UIControlEventTouchUpInside];
+        [_manualCoverView addSubview:closeBtn];
+        [closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(_manualCoverView).offset(-20);
+            make.top.equalTo(_manualCoverView).offset(30);
+        }];
+    }
+    return _manualCoverView;
+}
+
+- (UIView *)manualView {
+    if (!_manualView) {
+        _manualView = [UIView new];
+        _manualView.backgroundColor = [UIColor clearColor];
+        // 半圆图片
+        UIImageView *roundImageView = [UIImageView new];
+        roundImageView.image = [UIImage imageNamed:@"home_arc_bg"];
+        [_manualView addSubview:roundImageView];
+        [roundImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.top.equalTo(_manualView);
+        }];
+        // 计费说明
+        UILabel *jiFeiLbl = [UILabel new];
+        jiFeiLbl.layer.cornerRadius = 8;
+        jiFeiLbl.layer.masksToBounds = YES;
+        jiFeiLbl.backgroundColor = [UIColor colorWithRed:243/255.0 green:243/255.0 blue:243/255.0 alpha:1.0];
+        jiFeiLbl.textAlignment = NSTextAlignmentCenter;
+        jiFeiLbl.text = @"计费说明：1元/小时";
+        jiFeiLbl.font = [UIFont systemFontOfSize:15];
+        [_manualView addSubview:jiFeiLbl];
+        [jiFeiLbl mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(_manualView);
+            make.top.equalTo(_manualView).offset(80);
+            make.width.mas_equalTo(138);
+            make.height.mas_equalTo(18);
+        }];
+        // 底部视图
+        UIView *bottomView = [UIView new];
+        bottomView.backgroundColor = [UIColor whiteColor];
+        [_manualView addSubview:bottomView];
+        [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.bottom.equalTo(_manualView);
+            make.top.equalTo(roundImageView.mas_bottom);
+        }];
+        UILabel *lbl = [UILabel new];
+        lbl.text = @"输入车牌号，获取解锁码";
+        lbl.font = [UIFont systemFontOfSize:13];
+        lbl.textColor = [UIColor grayColor];
+        [bottomView addSubview:lbl];
+        [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(bottomView);
+            make.top.equalTo(bottomView).offset(5);
+        }];
+        UITextField *tf = [UITextField new];
+        tf.font = [UIFont systemFontOfSize:15];
+        tf.borderStyle = UITextBorderStyleRoundedRect;
+        tf.textAlignment = NSTextAlignmentCenter;
+        tf.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+        tf.placeholder = @"请输入车牌号";
+        [bottomView addSubview:tf];
+        [tf mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(lbl.mas_bottom).offset(15);
+            make.centerX.equalTo(bottomView);
+            make.width.mas_equalTo(kScreenWidth - 80);
+            make.height.mas_equalTo(45);
+        }];
+    }
+    return _manualView;
 }
 
 @end

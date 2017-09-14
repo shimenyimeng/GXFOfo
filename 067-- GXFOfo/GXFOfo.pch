@@ -21,4 +21,7 @@
 #define GXFLog(...)
 #endif
 
+#define kScreenWidth [UIScreen mainScreen].bounds.size.width
+#define kScreenHeight [UIScreen mainScreen].bounds.size.height
+
 #endif /* GXFOfo_pch */

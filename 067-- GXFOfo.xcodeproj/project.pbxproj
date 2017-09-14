@@ -23,6 +23,10 @@
 		D9C293BF1F67CA2F0067F540 /* OFOMessageFucView.m in Sources */ = {isa = PBXBuildFile; fileRef = D9C293BE1F67CA2F0067F540 /* OFOMessageFucView.m */; };
 		D9C293C21F67D6970067F540 /* OFOMessageListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D9C293C11F67D6970067F540 /* OFOMessageListCell.m */; };
 		D9D3866A1F68C78D0007EAF3 /* OFOUserCenterBtn.m in Sources */ = {isa = PBXBuildFile; fileRef = D9D386691F68C78D0007EAF3 /* OFOUserCenterBtn.m */; };
+		D9D3866D1F68FF7A0007EAF3 /* DZQrScanningVC.m in Sources */ = {isa = PBXBuildFile; fileRef = D9D3866C1F68FF7A0007EAF3 /* DZQrScanningVC.m */; };
+		D9D386701F68FFEE0007EAF3 /* DZQrScanningBaseVC.m in Sources */ = {isa = PBXBuildFile; fileRef = D9D3866F1F68FFEE0007EAF3 /* DZQrScanningBaseVC.m */; };
+		D9D386731F69011F0007EAF3 /* DZQrModel.m in Sources */ = {isa = PBXBuildFile; fileRef = D9D386721F69011F0007EAF3 /* DZQrModel.m */; };
+		D9D386761F6901560007EAF3 /* DZQrScanningBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = D9D386751F6901560007EAF3 /* DZQrScanningBaseView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +59,14 @@
 		D9C293C11F67D6970067F540 /* OFOMessageListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OFOMessageListCell.m; sourceTree = "<group>"; };
 		D9D386681F68C78D0007EAF3 /* OFOUserCenterBtn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OFOUserCenterBtn.h; sourceTree = "<group>"; };
 		D9D386691F68C78D0007EAF3 /* OFOUserCenterBtn.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OFOUserCenterBtn.m; sourceTree = "<group>"; };
+		D9D3866B1F68FF7A0007EAF3 /* DZQrScanningVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZQrScanningVC.h; sourceTree = "<group>"; };
+		D9D3866C1F68FF7A0007EAF3 /* DZQrScanningVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZQrScanningVC.m; sourceTree = "<group>"; };
+		D9D3866E1F68FFED0007EAF3 /* DZQrScanningBaseVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZQrScanningBaseVC.h; sourceTree = "<group>"; };
+		D9D3866F1F68FFEE0007EAF3 /* DZQrScanningBaseVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZQrScanningBaseVC.m; sourceTree = "<group>"; };
+		D9D386711F69011F0007EAF3 /* DZQrModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZQrModel.h; sourceTree = "<group>"; };
+		D9D386721F69011F0007EAF3 /* DZQrModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZQrModel.m; sourceTree = "<group>"; };
+		D9D386741F6901560007EAF3 /* DZQrScanningBaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DZQrScanningBaseView.h; sourceTree = "<group>"; };
+		D9D386751F6901560007EAF3 /* DZQrScanningBaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DZQrScanningBaseView.m; sourceTree = "<group>"; wrapsLines = 0; };
 		E1B3A15825F19E9B422F7958 /* Pods-067-- GXFOfo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-067-- GXFOfo.release.xcconfig"; path = "Pods/Target Support Files/Pods-067-- GXFOfo/Pods-067-- GXFOfo.release.xcconfig"; sourceTree = "<group>"; };
 		E99F61286CFE1BA543649EC6 /* Pods-067-- GXFOfo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-067-- GXFOfo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-067-- GXFOfo/Pods-067-- GXFOfo.debug.xcconfig"; sourceTree = "<group>"; };
 		F5CC59FA898D8AFE41B7D562 /* libPods-067-- GXFOfo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-067-- GXFOfo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -115,6 +127,14 @@
 				D9C293C11F67D6970067F540 /* OFOMessageListCell.m */,
 				D9D386681F68C78D0007EAF3 /* OFOUserCenterBtn.h */,
 				D9D386691F68C78D0007EAF3 /* OFOUserCenterBtn.m */,
+				D9D386741F6901560007EAF3 /* DZQrScanningBaseView.h */,
+				D9D386751F6901560007EAF3 /* DZQrScanningBaseView.m */,
+				D9D3866E1F68FFED0007EAF3 /* DZQrScanningBaseVC.h */,
+				D9D3866F1F68FFEE0007EAF3 /* DZQrScanningBaseVC.m */,
+				D9D3866B1F68FF7A0007EAF3 /* DZQrScanningVC.h */,
+				D9D3866C1F68FF7A0007EAF3 /* DZQrScanningVC.m */,
+				D9D386711F69011F0007EAF3 /* DZQrModel.h */,
+				D9D386721F69011F0007EAF3 /* DZQrModel.m */,
 				D9C293AF1F678D9C0067F540 /* LoopView */,
 				D91A57041F6771D800351112 /* GXFAdvertiseView.h */,
 				D91A57051F6771D800351112 /* GXFAdvertiseView.m */,
@@ -295,10 +315,14 @@
 				D91A56F31F66605100351112 /* ViewController.m in Sources */,
 				D9C293B61F678DAE0067F540 /* GXFCollectionViewCell.m in Sources */,
 				D9C293BF1F67CA2F0067F540 /* OFOMessageFucView.m in Sources */,
+				D9D3866D1F68FF7A0007EAF3 /* DZQrScanningVC.m in Sources */,
+				D9D386761F6901560007EAF3 /* DZQrScanningBaseView.m in Sources */,
+				D9D386701F68FFEE0007EAF3 /* DZQrScanningBaseVC.m in Sources */,
 				D9C293C21F67D6970067F540 /* OFOMessageListCell.m in Sources */,
 				D91A56F01F66605100351112 /* AppDelegate.m in Sources */,
 				D9C293AE1F67800C0067F540 /* OFOMessageViewController.m in Sources */,
 				D91A56ED1F66605100351112 /* main.m in Sources */,
+				D9D386731F69011F0007EAF3 /* DZQrModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -415,7 +439,7 @@
 				GCC_PREFIX_HEADER = "/Users/guxuefei/Desktop/顾雪飞/练习/067-- GXFOfo/067-- GXFOfo/GXFOfo.pch";
 				INFOPLIST_FILE = "067-- GXFOfo/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = guxuefei;
+				PRODUCT_BUNDLE_IDENTIFIER = guxuefeix;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -429,7 +453,7 @@
 				GCC_PREFIX_HEADER = "/Users/guxuefei/Desktop/顾雪飞/练习/067-- GXFOfo/067-- GXFOfo/GXFOfo.pch";
 				INFOPLIST_FILE = "067-- GXFOfo/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = guxuefei;
+				PRODUCT_BUNDLE_IDENTIFIER = guxuefeix;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
