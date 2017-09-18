@@ -16,11 +16,12 @@
 @property (nonatomic, strong) CALayer *tempLayer;
 @property (nonatomic, strong) UIImageView *scanningline;
 @property (nonatomic, strong) NSTimer *timer;
+@property (nonatomic, strong) UIButton *light_button;
 
 @end
 @implementation DZQrScanningBaseView
 //扫描动画线的高度
-static CGFloat const scanninglineHeight = 12;
+static CGFloat const scanninglineHeight = 5;
 //扫描内容外部View的alpha值
 static CGFloat const scanBorderOutsideViewAlpha = 0.4;
 
@@ -34,7 +35,6 @@ static CGFloat const scanBorderOutsideViewAlpha = 0.4;
 - (instancetype)initWithFrame:(CGRect)frame layer:(CALayer *)layer {
     if (self = [super initWithFrame:frame]) {
         self.tempLayer = layer;
-        
         // 布局扫描界面
         [self setupSubviews];
         
@@ -70,9 +70,15 @@ static CGFloat const scanBorderOutsideViewAlpha = 0.4;
     CGFloat scanContent_layerH = scanContent_layerW;
     scanContent_layer.frame = CGRectMake(scanContent_X, scanContent_layerY, scanContent_layerW, scanContent_layerH);
     scanContent_layer.borderColor = [[UIColor whiteColor] colorWithAlphaComponent:0.6].CGColor;
-    scanContent_layer.borderWidth = 0.7;
+//    scanContent_layer.borderWidth = 20;
     scanContent_layer.backgroundColor = [UIColor clearColor].CGColor;
     [self.tempLayer addSublayer:scanContent_layer];
+    
+    // 扫描框图片
+    UIImageView *QrImageView = [UIImageView new];
+    QrImageView.image = [UIImage imageNamed:@"bg_QRCodeStorke"];
+    [self addSubview:QrImageView];
+    QrImageView.frame = CGRectMake(scanContent_X, scanContent_layerY, scanContent_layerW, scanContent_layerH);
     
     // 顶部layer的创建
     CALayer *top_layer = [[CALayer alloc] init];
@@ -131,6 +137,7 @@ static CGFloat const scanBorderOutsideViewAlpha = 0.4;
     
     // 添加闪光灯按钮
     UIButton *light_button = [[UIButton alloc] init];
+    self.light_button = light_button;
     light_button.layer.cornerRadius = 22.5;
     light_button.layer.masksToBounds = YES;
     [light_button setImage:[UIImage imageNamed:@"btn_unenableTorch_w"] forState:UIControlStateNormal];
@@ -143,6 +150,12 @@ static CGFloat const scanBorderOutsideViewAlpha = 0.4;
         make.bottom.equalTo(self).offset(-50);
         make.size.mas_equalTo(CGSizeMake(45, 45));
     }];
+    // 设置手电筒
+    self.device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    if (self.device.torchMode == AVCaptureTorchModeOn) {
+        // 改变手电筒按钮的状态
+        self.light_button.selected = YES;
+    }
     
     UILabel *torchLbl = [UILabel new];
     torchLbl.text = @"打开手电筒";
@@ -233,7 +246,6 @@ static CGFloat const scanBorderOutsideViewAlpha = 0.4;
     }
 }
 - (void)turnOnLight:(BOOL)on {
-    self.device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
     if ([_device hasTorch]) {
         [_device lockForConfiguration:nil];
         if (on) {
@@ -247,8 +259,8 @@ static CGFloat const scanBorderOutsideViewAlpha = 0.4;
 - (UIImageView *)scanningline {
     if (!_scanningline) {
         _scanningline = [[UIImageView alloc] init];
-        _scanningline.image = [UIImage imageNamed:@"qrLine"];
-        _scanningline.frame = CGRectMake(scanContent_X * 0.5, scanContent_Y, self.frame.size.width - scanContent_X , scanninglineHeight);
+        _scanningline.image = [UIImage imageNamed:@"bg_QRCodeLine"];
+        _scanningline.frame = CGRectMake(scanContent_X, scanContent_Y, self.frame.size.width - scanContent_X * 2 , scanninglineHeight);
     }
     return _scanningline;
 }

@@ -15,8 +15,9 @@
 #import "OFOUserCenterBtn.h"
 #import "pop.h"
 #import "DZQrScanningVC.h"
+#import "OFOManualViewBtn.h"
 
-#define kManualViewHeight 600
+#define kManualViewHeight 350
 
 @interface ViewController () <MAMapViewDelegate, AMapSearchDelegate, AMapLocationManagerDelegate, DZQrScanningBaseVCDelegate>
 
@@ -39,6 +40,8 @@
 @property (nonatomic, strong) UIView *userCenterTopView;
 @property (nonatomic, strong) UIView *manualCoverView;
 @property (nonatomic, strong) UIView *manualView;
+@property (nonatomic, strong) AVCaptureDevice *device;
+@property (nonatomic, strong) OFOManualViewBtn *torchBtn;
 
 @property (nonatomic, strong) AMapLocationManager *locationManager;
 
@@ -56,11 +59,25 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
     self.navigationController.navigationBar.hidden = YES;
+    // 判断手电筒状态
+//    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+//    if (device.torchMode == AVCaptureTorchModeOn) {
+////        if ([self.device hasTorch]) {
+////            [self.device lockForConfiguration:nil];
+////            [self.device setTorchMode:AVCaptureTorchModeOn];
+////            [self.device unlockForConfiguration];
+////        }
+//        
+//        [self funcBtnClick:self.torchBtn];
+//    }
 }
 
 - (void)setupUI {
+    // 创建手电筒设备
+    self.device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    // 监听键盘frame改变
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardFrameChange:) name:UIKeyboardWillChangeFrameNotification object:nil];
     
     // 初始化地图
     MAMapView *mapView = [[MAMapView alloc] initWithFrame:self.view.bounds];
@@ -364,11 +381,49 @@
     [self presentViewController:scanningVc animated:YES completion:nil];
 }
 
+#pragma mark - 立即用车（手动输入时）
+- (void)ImmediateUseBikeBtnClick {
+    
+}
+
+#pragma mark - 关闭手动用车视图
 - (void)closeManualView {
+    [self.view endEditing:YES];
     [self.manualCoverView removeFromSuperview];
     [UIView animateWithDuration:0.25 animations:^{
         self.manualView.transform = CGAffineTransformIdentity;
+    } completion:^(BOOL finished) {
+        [self.manualView removeFromSuperview];
+        self.manualView = nil;
     }];
+}
+
+#pragma mark - 点击manualView隐藏键盘
+- (void)manualViewTap {
+    [self.view endEditing:YES];
+}
+
+#pragma mark - manualView 3个功能按钮的点击事件
+- (void)funcBtnClick:(OFOManualViewBtn *)button {
+    button.selected = !button.isSelected;
+    
+    if (button.tag == 0) { // 手电筒
+        if ([_device hasTorch]) {
+            [_device lockForConfiguration:nil];
+            if (button.isSelected) {
+                [_device setTorchMode:AVCaptureTorchModeOn];
+            } else {
+                [_device setTorchMode: AVCaptureTorchModeOff];
+            }
+            [_device unlockForConfiguration];
+        }
+    } else if (button.tag == 1) { // 声音
+        
+    } else { // 扫码解锁
+        // 移除manualView，弹出扫码视图
+        [self closeManualView];
+        [self useBtnClcik];
+    }
 }
 
 #pragma mark - 用户中心的拖拽手势
@@ -380,6 +435,24 @@
         [self.userCenterBottomView removeFromSuperview];
         self.userCenterBottomView = nil;
     }];
+}
+
+#pragma mark - 监听键盘frame改变
+- (void)keyBoardFrameChange:(NSNotification *)notif {
+    
+    CGRect rect = [notif.userInfo[@"UIKeyboardFrameEndUserInfoKey"] CGRectValue];
+    
+    if (rect.origin.y == kScreenHeight) {
+        // 0.25s 内降低manualView
+        [UIView animateWithDuration:2.0 animations:^{
+            self.manualView.transform = CGAffineTransformIdentity;
+        }];
+    } else {
+        // 0.25s 内升高manualView
+        [UIView animateWithDuration:2.0 animations:^{
+            self.manualView.transform = CGAffineTransformMakeTranslation(0, -rect.size.height);
+        }];
+    }
 }
 
 #pragma mark - AMapLocationManagerDelegate
@@ -594,19 +667,19 @@
     [self.view addSubview:self.manualView];
     [self.manualView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
-        make.top.equalTo(self.view.mas_bottom);
+        make.bottom.equalTo(self.view);
         make.height.mas_equalTo(kManualViewHeight);
     }];
     
-    [UIView animateWithDuration:0.01 animations:^{
-        self.manualView.transform = CGAffineTransformMakeTranslation(0, -1);
-    } completion:^(BOOL finished) {
-        [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-            self.manualView.transform = CGAffineTransformMakeTranslation(0, -kManualViewHeight);
-        } completion:^(BOOL finished) {
-            
-        }];
-    }];
+//    [UIView animateWithDuration:0.01 animations:^{
+//        self.manualView.transform = CGAffineTransformMakeTranslation(0, -1);
+//    } completion:^(BOOL finished) {
+//        [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
+//            self.manualView.transform = CGAffineTransformMakeTranslation(0, -kManualViewHeight);
+//        } completion:^(BOOL finished) {
+//            
+//        }];
+//    }];
 }
 
 - (UIView *)manualCoverView {
@@ -636,6 +709,8 @@
     if (!_manualView) {
         _manualView = [UIView new];
         _manualView.backgroundColor = [UIColor clearColor];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(manualViewTap)];
+        [_manualView addGestureRecognizer:tap];
         // 半圆图片
         UIImageView *roundImageView = [UIImageView new];
         roundImageView.image = [UIImage imageNamed:@"home_arc_bg"];
@@ -673,21 +748,69 @@
         [bottomView addSubview:lbl];
         [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(bottomView);
-            make.top.equalTo(bottomView).offset(5);
+            make.top.equalTo(bottomView).offset(8);
         }];
         UITextField *tf = [UITextField new];
+        [tf becomeFirstResponder];
+        tf.layer.cornerRadius = 22.5;
+        tf.layer.masksToBounds = YES;
+        tf.layer.borderColor = [UIColor colorWithRed:254/255.0 green:218/255.0 blue:49/255.0 alpha:1.0].CGColor;
+        tf.layer.borderWidth = 2;
+        tf.keyboardType = UIKeyboardTypeNumberPad;
         tf.font = [UIFont systemFontOfSize:15];
-        tf.borderStyle = UITextBorderStyleRoundedRect;
         tf.textAlignment = NSTextAlignmentCenter;
         tf.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
         tf.placeholder = @"请输入车牌号";
         [bottomView addSubview:tf];
         [tf mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(lbl.mas_bottom).offset(15);
+            make.top.equalTo(lbl.mas_bottom).offset(18);
             make.centerX.equalTo(bottomView);
             make.width.mas_equalTo(kScreenWidth - 80);
             make.height.mas_equalTo(45);
         }];
+        
+        // 立即用车按钮
+        UIButton *useBikeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        useBikeBtn.layer.cornerRadius = 22.5;
+        useBikeBtn.layer.masksToBounds = YES;
+        [useBikeBtn setTitle:@"立即用车" forState:UIControlStateNormal];
+        useBikeBtn.backgroundColor = GXFRGBColor(206, 206, 206);
+        [useBikeBtn addTarget:self action:@selector(ImmediateUseBikeBtnClick) forControlEvents:UIControlEventTouchUpInside];
+        [bottomView addSubview:useBikeBtn];
+        [useBikeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(tf.mas_bottom).offset(8);
+            make.left.right.height.equalTo(tf);
+        }];
+        
+        // 底部功能按钮
+        UIStackView *stackView = [UIStackView new];
+        stackView.backgroundColor = GXFRandomColor;
+        [_manualView addSubview:stackView];
+        for (NSInteger i = 0; i<3; i++) {
+            // torch_close_icon voice_icon scan_icon
+            OFOManualViewBtn *btn;
+            if (i==0) {
+                btn = [OFOManualViewBtn buttonWithImageName:@"torch_close_icon" selectedImageName:@"btn_enableTorch" title:@"手电筒"];
+                self.torchBtn = btn;
+            } else if (i==1) {
+                btn = [OFOManualViewBtn buttonWithImageName:@"voice_icon" selectedImageName:@"voice_close" title:@"声音"];
+            } else {
+                btn = [OFOManualViewBtn buttonWithImageName:@"scan_icon" selectedImageName:@""  title:@"扫码解锁"];
+            }
+            btn.tag = i;
+            [btn addTarget:self action:@selector(funcBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+            [stackView addArrangedSubview:btn];
+        }
+        stackView.alignment = UIStackViewAlignmentCenter;
+        stackView.distribution = UIStackViewDistributionEqualCentering;
+        [bottomView addSubview:stackView];
+        [stackView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(useBikeBtn.mas_bottom).offset(10);
+            make.left.equalTo(useBikeBtn).offset(20);
+            make.right.equalTo(useBikeBtn).offset(-20);
+            make.height.mas_equalTo(50);
+        }];
+        
     }
     return _manualView;
 }

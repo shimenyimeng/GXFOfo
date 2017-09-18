@@ -13,6 +13,7 @@
 
 - (void)qrScanningBaseView:(DZQrScanningBaseView *)scanningBaseView closeBtnClick:(UIButton *)closeBtn;
 - (void)qrScanningBaseView:(DZQrScanningBaseView *)scanningBaseView manualBtnClcik:(UIButton *)manualBtn;
+- (void)light_buttonAction:(UIButton *)button;
 
 @end
 
