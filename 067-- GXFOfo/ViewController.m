@@ -16,8 +16,14 @@
 #import "pop.h"
 #import "DZQrScanningVC.h"
 #import "OFOManualViewBtn.h"
+#import "OFOMyTripVc.h"
+#import "OFOMyWalletVc.h"
+#import "OFOInviteFriendVc.h"
+#import "OFOYouHuiVc.h"
+#import "OFOMyServiceVc.h"
 
-#define kManualViewHeight 350
+#define kManualViewHeight 340
+#define kKeyBoardHeight 216
 
 @interface ViewController () <MAMapViewDelegate, AMapSearchDelegate, AMapLocationManagerDelegate, DZQrScanningBaseVCDelegate>
 
@@ -42,6 +48,11 @@
 @property (nonatomic, strong) UIView *manualView;
 @property (nonatomic, strong) AVCaptureDevice *device;
 @property (nonatomic, strong) OFOManualViewBtn *torchBtn;
+@property (nonatomic, strong) UIView *customKeyBoardView;
+@property (nonatomic, strong) UITextField *numTf;
+@property (nonatomic, strong) UIButton *confirmBtn;
+@property (nonatomic, strong) UIButton *useBikeBtn;
+@property (nonatomic, strong) UILabel *messageLbl;
 
 @property (nonatomic, strong) AMapLocationManager *locationManager;
 
@@ -59,7 +70,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    self.navigationController.navigationBar.hidden = YES;
     // 判断手电筒状态
 //    AVCaptureDevice *device = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
 //    if (device.torchMode == AVCaptureTorchModeOn) {
@@ -71,6 +81,12 @@
 //        
 //        [self funcBtnClick:self.torchBtn];
 //    }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    self.navigationController.navigationBar.hidden = YES;
 }
 
 - (void)setupUI {
@@ -341,6 +357,7 @@
     self.oldY = newY;
 }
 
+#pragma mark - 进入用户中心
 - (void)userCenterBtnClick {
     // 上下同时出现
     UIView *topView = [UIView new];
@@ -367,6 +384,38 @@
             self.userCenterBottomView.transform = CGAffineTransformMakeTranslation(0, -self.userCenterBottomView.bounds.size.height);
         }];
     }];
+}
+
+#pragma mark - 用户中心的拖拽手势
+- (void)removeUserCenterView:(UIPanGestureRecognizer *)pan {
+    [UIView animateWithDuration:0.25 animations:^{
+        self.userCenterBottomView.transform = CGAffineTransformIdentity;
+        self.userCenterTopView.transform = CGAffineTransformIdentity;
+    } completion:^(BOOL finished) {
+        [self.userCenterBottomView removeFromSuperview];
+        self.userCenterBottomView = nil;
+    }];
+}
+
+#pragma mark - 用户中心条目的点击
+- (void)useCenterBtnClick:(OFOUserCenterBtn *)button {
+    self.navigationController.navigationBar.hidden = NO;
+    if (button.tag == 0) { // 我的行程
+        OFOMyTripVc *myTripVc = [OFOMyTripVc new];
+        [self.navigationController pushViewController:myTripVc animated:YES];
+    } else if (button.tag == 1) { // 我的钱包
+        OFOMyWalletVc *myWalletVc = [OFOMyWalletVc new];
+        [self.navigationController pushViewController:myWalletVc animated:YES];
+    } else if (button.tag == 2) { // 邀请好友
+        OFOInviteFriendVc *inviteFriendVc = [OFOInviteFriendVc new];
+        [self.navigationController pushViewController:inviteFriendVc animated:YES];
+    } else if (button.tag == 3) { // 兑优惠券
+        OFOYouHuiVc *youHuiVc = [OFOYouHuiVc new];
+        [self.navigationController pushViewController:youHuiVc animated:YES];
+    } else if (button.tag == 4) { // 我的客服
+        OFOMyServiceVc *myServiceVc = [OFOMyServiceVc new];
+        [self.navigationController pushViewController:myServiceVc animated:YES];
+    }
 }
 
 - (void)messageBtnClick {
@@ -426,15 +475,35 @@
     }
 }
 
-#pragma mark - 用户中心的拖拽手势
-- (void)removeUserCenterView:(UIPanGestureRecognizer *)pan {
-    [UIView animateWithDuration:0.25 animations:^{
-        self.userCenterBottomView.transform = CGAffineTransformIdentity;
-        self.userCenterTopView.transform = CGAffineTransformIdentity;
-    } completion:^(BOOL finished) {
-        [self.userCenterBottomView removeFromSuperview];
-        self.userCenterBottomView = nil;
-    }];
+#pragma mark - 数字按钮点击
+- (void)numBtnClick:(UIButton *)button {
+    NSString *newStr = [self.numTf.text stringByAppendingString:button.titleLabel.text];
+    self.numTf.text = newStr;
+    self.confirmBtn.enabled = YES;
+    self.useBikeBtn.enabled = YES;
+    self.messageLbl.text = @"车牌号一般为4~8位的数字";
+}
+
+#pragma mark - 删除按钮点击
+- (void)clearBtnClick {
+    if (self.numTf.text.length > 1) {
+        NSString *newStr = [self.numTf.text substringToIndex:self.numTf.text.length -1];
+        self.numTf.text = newStr;
+    } else if (self.numTf.text.length == 1) {
+        self.numTf.text = @"";
+    } else {
+        return;
+    }
+    if ([self.numTf.text isEqualToString:@""]) {
+        self.confirmBtn.enabled = NO;
+        self.useBikeBtn.enabled = NO;
+        self.messageLbl.text = @"输入车牌号，获取解锁码";
+    }
+}
+
+#pragma mark - 确定按钮点击
+- (void)confirmBtnClick {
+    
 }
 
 #pragma mark - 监听键盘frame改变
@@ -453,6 +522,18 @@
             self.manualView.transform = CGAffineTransformMakeTranslation(0, -rect.size.height);
         }];
     }
+}
+
+#pragma mark - 根据颜色生成图片
+- (UIImage*)createImageWithColor:(UIColor*)color{
+    CGRect rect=CGRectMake(0.0f,0.0f,1.0f,1.0f);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context=UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, rect);
+    UIImage *image=UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
 }
 
 #pragma mark - AMapLocationManagerDelegate
@@ -639,6 +720,8 @@
             [btn setTitle:titleArray[i] forState:UIControlStateNormal];
             [btn setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
             btn.titleLabel.font = [UIFont systemFontOfSize:15];
+            btn.tag = i;
+            [btn addTarget:self action:@selector(useCenterBtnClick:) forControlEvents:UIControlEventTouchUpInside];
             [selectView addSubview:btn];
             [btn mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.equalTo(phoneNumView);
@@ -720,9 +803,9 @@
         }];
         // 计费说明
         UILabel *jiFeiLbl = [UILabel new];
-        jiFeiLbl.layer.cornerRadius = 8;
+        jiFeiLbl.layer.cornerRadius = 12.5;
         jiFeiLbl.layer.masksToBounds = YES;
-        jiFeiLbl.backgroundColor = [UIColor colorWithRed:243/255.0 green:243/255.0 blue:243/255.0 alpha:1.0];
+        jiFeiLbl.backgroundColor = GXFRGBColor(243, 243, 243);
         jiFeiLbl.textAlignment = NSTextAlignmentCenter;
         jiFeiLbl.text = @"计费说明：1元/小时";
         jiFeiLbl.font = [UIFont systemFontOfSize:15];
@@ -730,8 +813,8 @@
         [jiFeiLbl mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(_manualView);
             make.top.equalTo(_manualView).offset(80);
-            make.width.mas_equalTo(138);
-            make.height.mas_equalTo(18);
+            make.width.mas_equalTo(150);
+            make.height.mas_equalTo(25);
         }];
         // 底部视图
         UIView *bottomView = [UIView new];
@@ -742,15 +825,17 @@
             make.top.equalTo(roundImageView.mas_bottom);
         }];
         UILabel *lbl = [UILabel new];
+        self.messageLbl = lbl;
         lbl.text = @"输入车牌号，获取解锁码";
         lbl.font = [UIFont systemFontOfSize:13];
         lbl.textColor = [UIColor grayColor];
         [bottomView addSubview:lbl];
         [lbl mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(bottomView);
-            make.top.equalTo(bottomView).offset(8);
+            make.top.equalTo(bottomView).offset(12);
         }];
         UITextField *tf = [UITextField new];
+        self.numTf = tf;
         [tf becomeFirstResponder];
         tf.layer.cornerRadius = 22.5;
         tf.layer.masksToBounds = YES;
@@ -768,17 +853,24 @@
             make.width.mas_equalTo(kScreenWidth - 80);
             make.height.mas_equalTo(45);
         }];
+        // 自定义数字键盘
+        tf.inputView = self.customKeyBoardView;
         
         // 立即用车按钮
         UIButton *useBikeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.useBikeBtn = useBikeBtn;
+        useBikeBtn.enabled = NO;
         useBikeBtn.layer.cornerRadius = 22.5;
         useBikeBtn.layer.masksToBounds = YES;
         [useBikeBtn setTitle:@"立即用车" forState:UIControlStateNormal];
+        [useBikeBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [useBikeBtn setBackgroundImage:[UIImage imageNamed:@"credit_label_bd"] forState:UIControlStateNormal];
+        [useBikeBtn setBackgroundImage:[self createImageWithColor:GXFRGBColor(206, 206, 206)] forState:UIControlStateDisabled];
         useBikeBtn.backgroundColor = GXFRGBColor(206, 206, 206);
         [useBikeBtn addTarget:self action:@selector(ImmediateUseBikeBtnClick) forControlEvents:UIControlEventTouchUpInside];
         [bottomView addSubview:useBikeBtn];
         [useBikeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(tf.mas_bottom).offset(8);
+            make.top.equalTo(tf.mas_bottom).offset(12);
             make.left.right.height.equalTo(tf);
         }];
         
@@ -813,6 +905,79 @@
         
     }
     return _manualView;
+}
+
+- (UIView *)customKeyBoardView {
+    if (!_customKeyBoardView) {
+        _customKeyBoardView = [UIView new];
+        _customKeyBoardView.layer.borderWidth = 1;
+        _customKeyBoardView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+        _customKeyBoardView.backgroundColor = [UIColor whiteColor];
+        _customKeyBoardView.frame = CGRectMake(0, 0, kScreenWidth, kKeyBoardHeight);
+        // 左边数字键视图
+        UIView *leftView = [UIView new];
+        [_customKeyBoardView addSubview:leftView];
+        [leftView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.top.bottom.equalTo(_customKeyBoardView);
+            make.width.mas_equalTo(kScreenWidth / 4 * 3);
+        }];
+        CGFloat w = kScreenWidth / 4;
+        CGFloat h = kKeyBoardHeight / 4;
+        for (NSInteger i = 0; i<12; i++) {
+            UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+//            btn.backgroundColor = GXFRandomColor;
+            btn.titleLabel.font = [UIFont systemFontOfSize:25];
+            [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            // 186 189 194
+            [btn setBackgroundImage:[self createImageWithColor:GXFRGBColor(186, 189, 194)] forState:UIControlStateHighlighted];
+            btn.layer.borderWidth = 0.5;
+            btn.layer.borderColor = [UIColor lightGrayColor].CGColor;
+            if (i<9) {
+                [btn setTitle:[NSString stringWithFormat:@"%zd", i+1] forState:UIControlStateNormal];
+            } else if (i==10) {
+                [btn setTitle:@"0" forState:UIControlStateNormal];
+            }
+            CGFloat x = i%3 * w;
+            CGFloat y = i/3 * h;
+            btn.frame = CGRectMake(x, y, w, h);
+            [btn addTarget:self action:@selector(numBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+            [leftView addSubview:btn];
+            if (i == 9 || i == 11) {
+                btn.userInteractionEnabled = NO;
+            }
+        }
+        // 删除按钮
+        // Back
+        UIButton *clearBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [clearBtn setImage:[UIImage imageNamed:@"Back"] forState:UIControlStateNormal];
+        [clearBtn setBackgroundImage:[self createImageWithColor:GXFRGBColor(186, 189, 194)] forState:UIControlStateHighlighted];
+        [clearBtn addTarget:self action:@selector(clearBtnClick) forControlEvents:UIControlEventTouchUpInside];
+        [_customKeyBoardView addSubview:clearBtn];
+        [clearBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(leftView.mas_right);
+            make.top.right.equalTo(_customKeyBoardView);
+            make.height.mas_equalTo(kKeyBoardHeight * 0.5);
+        }];
+        // 确定按钮
+        UIButton *confirmBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.confirmBtn = confirmBtn;
+        confirmBtn.enabled = NO;
+        [confirmBtn setTitle:@"确定" forState:UIControlStateNormal];
+        confirmBtn.titleLabel.font = [UIFont systemFontOfSize:25];
+        [confirmBtn setTitleColor:GXFRGBColor(221, 221, 221) forState:UIControlStateDisabled];
+        [confirmBtn setBackgroundImage:[self createImageWithColor:GXFRGBColor(206, 206, 206)] forState:UIControlStateDisabled];
+        [confirmBtn setBackgroundColor:GXFRGBColor(98, 166, 238)];
+        [confirmBtn setBackgroundImage:[self createImageWithColor:GXFRGBColor(186, 189, 194)] forState:UIControlStateHighlighted];
+        [confirmBtn addTarget:self action:@selector(confirmBtnClick) forControlEvents:UIControlEventTouchUpInside];
+        [_customKeyBoardView addSubview:confirmBtn];
+        [confirmBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(leftView.mas_right);
+            make.top.equalTo(clearBtn.mas_bottom);
+            make.right.equalTo(_customKeyBoardView);
+            make.height.mas_equalTo(kKeyBoardHeight * 0.5);
+        }];
+    }
+    return _customKeyBoardView;
 }
 
 @end

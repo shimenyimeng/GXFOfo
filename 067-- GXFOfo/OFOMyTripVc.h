@@ -1,15 +1,13 @@
 //
-//  ViewController.h
+//  OFOMyTripVc.h
 //  067-- GXFOfo
 //
-//  Created by 顾雪飞 on 2017/9/11.
+//  Created by 顾雪飞 on 2017/9/18.
 //  Copyright © 2017年 顾雪飞. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : OFOBaseViewController
-
+@interface OFOMyTripVc : OFOBaseViewController
 
 @end
-

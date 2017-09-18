@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OFOMessageViewController : UIViewController
+@interface OFOMessageViewController : OFOBaseViewController
 
 @end

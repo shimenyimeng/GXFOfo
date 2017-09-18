@@ -15,6 +15,13 @@
 		D91A56FB1F66605100351112 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D91A56F91F66605100351112 /* LaunchScreen.storyboard */; };
 		D91A57031F6661AF00351112 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D91A57021F6661AF00351112 /* Main.storyboard */; };
 		D91A57061F6771D800351112 /* GXFAdvertiseView.m in Sources */ = {isa = PBXBuildFile; fileRef = D91A57051F6771D800351112 /* GXFAdvertiseView.m */; };
+		D9251AD71F6FA1BC0025F8BB /* OFOMyTripVc.m in Sources */ = {isa = PBXBuildFile; fileRef = D9251AD61F6FA1BC0025F8BB /* OFOMyTripVc.m */; };
+		D9251ADA1F6FA2EE0025F8BB /* OFOMyWalletVc.m in Sources */ = {isa = PBXBuildFile; fileRef = D9251AD91F6FA2EE0025F8BB /* OFOMyWalletVc.m */; };
+		D9251ADD1F6FA64D0025F8BB /* OFOInviteFriendVc.m in Sources */ = {isa = PBXBuildFile; fileRef = D9251ADC1F6FA64D0025F8BB /* OFOInviteFriendVc.m */; };
+		D9251AE01F6FA6860025F8BB /* OFOYouHuiVc.m in Sources */ = {isa = PBXBuildFile; fileRef = D9251ADF1F6FA6860025F8BB /* OFOYouHuiVc.m */; };
+		D9251AE31F6FA6AE0025F8BB /* OFOMyServiceVc.m in Sources */ = {isa = PBXBuildFile; fileRef = D9251AE21F6FA6AE0025F8BB /* OFOMyServiceVc.m */; };
+		D9251AE61F6FA8130025F8BB /* OFOBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9251AE51F6FA8130025F8BB /* OFOBaseViewController.m */; };
+		D9251AE91F6FAC1C0025F8BB /* OFOUserCenterVc.m in Sources */ = {isa = PBXBuildFile; fileRef = D9251AE81F6FAC1C0025F8BB /* OFOUserCenterVc.m */; };
 		D9C293AE1F67800C0067F540 /* OFOMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9C293AD1F67800C0067F540 /* OFOMessageViewController.m */; };
 		D9C293B61F678DAE0067F540 /* GXFCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D9C293B11F678DAE0067F540 /* GXFCollectionViewCell.m */; };
 		D9C293B71F678DAE0067F540 /* GXFFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = D9C293B31F678DAE0067F540 /* GXFFlowLayout.m */; };
@@ -43,6 +50,20 @@
 		D91A57021F6661AF00351112 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		D91A57041F6771D800351112 /* GXFAdvertiseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GXFAdvertiseView.h; sourceTree = "<group>"; };
 		D91A57051F6771D800351112 /* GXFAdvertiseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GXFAdvertiseView.m; sourceTree = "<group>"; };
+		D9251AD51F6FA1BC0025F8BB /* OFOMyTripVc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OFOMyTripVc.h; sourceTree = "<group>"; };
+		D9251AD61F6FA1BC0025F8BB /* OFOMyTripVc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OFOMyTripVc.m; sourceTree = "<group>"; };
+		D9251AD81F6FA2EE0025F8BB /* OFOMyWalletVc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OFOMyWalletVc.h; sourceTree = "<group>"; };
+		D9251AD91F6FA2EE0025F8BB /* OFOMyWalletVc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OFOMyWalletVc.m; sourceTree = "<group>"; };
+		D9251ADB1F6FA64D0025F8BB /* OFOInviteFriendVc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OFOInviteFriendVc.h; sourceTree = "<group>"; };
+		D9251ADC1F6FA64D0025F8BB /* OFOInviteFriendVc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OFOInviteFriendVc.m; sourceTree = "<group>"; };
+		D9251ADE1F6FA6860025F8BB /* OFOYouHuiVc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OFOYouHuiVc.h; sourceTree = "<group>"; };
+		D9251ADF1F6FA6860025F8BB /* OFOYouHuiVc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OFOYouHuiVc.m; sourceTree = "<group>"; };
+		D9251AE11F6FA6AE0025F8BB /* OFOMyServiceVc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OFOMyServiceVc.h; sourceTree = "<group>"; };
+		D9251AE21F6FA6AE0025F8BB /* OFOMyServiceVc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OFOMyServiceVc.m; sourceTree = "<group>"; };
+		D9251AE41F6FA8130025F8BB /* OFOBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OFOBaseViewController.h; sourceTree = "<group>"; };
+		D9251AE51F6FA8130025F8BB /* OFOBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OFOBaseViewController.m; sourceTree = "<group>"; };
+		D9251AE71F6FAC1C0025F8BB /* OFOUserCenterVc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OFOUserCenterVc.h; sourceTree = "<group>"; };
+		D9251AE81F6FAC1C0025F8BB /* OFOUserCenterVc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OFOUserCenterVc.m; sourceTree = "<group>"; };
 		D9C293AC1F67800C0067F540 /* OFOMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OFOMessageViewController.h; sourceTree = "<group>"; };
 		D9C293AD1F67800C0067F540 /* OFOMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OFOMessageViewController.m; sourceTree = "<group>"; };
 		D9C293B01F678DAE0067F540 /* GXFCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GXFCollectionViewCell.h; sourceTree = "<group>"; };
@@ -214,6 +235,18 @@
 		D9EC608F1F6E63C600C90F48 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D9251AE71F6FAC1C0025F8BB /* OFOUserCenterVc.h */,
+				D9251AE81F6FAC1C0025F8BB /* OFOUserCenterVc.m */,
+				D9251AD51F6FA1BC0025F8BB /* OFOMyTripVc.h */,
+				D9251AD61F6FA1BC0025F8BB /* OFOMyTripVc.m */,
+				D9251AD81F6FA2EE0025F8BB /* OFOMyWalletVc.h */,
+				D9251AD91F6FA2EE0025F8BB /* OFOMyWalletVc.m */,
+				D9251ADB1F6FA64D0025F8BB /* OFOInviteFriendVc.h */,
+				D9251ADC1F6FA64D0025F8BB /* OFOInviteFriendVc.m */,
+				D9251ADE1F6FA6860025F8BB /* OFOYouHuiVc.h */,
+				D9251ADF1F6FA6860025F8BB /* OFOYouHuiVc.m */,
+				D9251AE11F6FA6AE0025F8BB /* OFOMyServiceVc.h */,
+				D9251AE21F6FA6AE0025F8BB /* OFOMyServiceVc.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -246,6 +279,8 @@
 		D9EC60931F6E643F00C90F48 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D9251AE41F6FA8130025F8BB /* OFOBaseViewController.h */,
+				D9251AE51F6FA8130025F8BB /* OFOBaseViewController.m */,
 				D91A56F11F66605100351112 /* ViewController.h */,
 				D91A56F21F66605100351112 /* ViewController.m */,
 			);
@@ -448,11 +483,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9251AE01F6FA6860025F8BB /* OFOYouHuiVc.m in Sources */,
+				D9251AE91F6FAC1C0025F8BB /* OFOUserCenterVc.m in Sources */,
+				D9251AD71F6FA1BC0025F8BB /* OFOMyTripVc.m in Sources */,
 				D9C293BB1F678E020067F540 /* OFOMessageHeaderView.m in Sources */,
 				D9D3866A1F68C78D0007EAF3 /* OFOUserCenterBtn.m in Sources */,
 				D9C293B71F678DAE0067F540 /* GXFFlowLayout.m in Sources */,
 				D91A57061F6771D800351112 /* GXFAdvertiseView.m in Sources */,
 				D9C293B81F678DAE0067F540 /* GXFLoopView.m in Sources */,
+				D9251ADD1F6FA64D0025F8BB /* OFOInviteFriendVc.m in Sources */,
 				D91A56F31F66605100351112 /* ViewController.m in Sources */,
 				D9C293B61F678DAE0067F540 /* GXFCollectionViewCell.m in Sources */,
 				D9C293BF1F67CA2F0067F540 /* OFOMessageFucView.m in Sources */,
@@ -463,8 +502,11 @@
 				D91A56F01F66605100351112 /* AppDelegate.m in Sources */,
 				D9C293AE1F67800C0067F540 /* OFOMessageViewController.m in Sources */,
 				D91A56ED1F66605100351112 /* main.m in Sources */,
+				D9251ADA1F6FA2EE0025F8BB /* OFOMyWalletVc.m in Sources */,
+				D9251AE61F6FA8130025F8BB /* OFOBaseViewController.m in Sources */,
 				D9EC60871F6E631200C90F48 /* OFOManualViewBtn.m in Sources */,
 				D9D386731F69011F0007EAF3 /* DZQrModel.m in Sources */,
+				D9251AE31F6FA6AE0025F8BB /* OFOMyServiceVc.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
